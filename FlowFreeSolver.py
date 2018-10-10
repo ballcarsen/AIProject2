@@ -1,5 +1,6 @@
 from Node import Node
 from Map import Map
+from Map import iMap
 maps = []
 initMap = None
 def printMap(map):
@@ -22,7 +23,7 @@ def readMaze(file_name):
             # if start node, append to frontier
             if(lines[i][j] != '_'):
                 temp = positionDict.get(char, [])
-                temp.append(node)
+                temp.append([node.xCoor, node.yCoor])
                 positionDict[char] = temp
             # append to row of map
             row.append(node)
@@ -58,17 +59,21 @@ def addNeighbors(map):
 def findPath(map, node, path, goal, char):
     print("exploring %d %d" % (node.xCoor, node.yCoor))
     print('length %d' % len(node.neighbors))
+    map.printMap()
     for neighbor in node.neighbors:
         valid = 0
         position = (neighbor.xCoor, neighbor.yCoor)
         print(position)
+        print(neighbor.char)
         if position == goal:
             print('goal')
             print(path)
-            m = Map(initMap, path, char)
+            m = Map(map, path, char)
             maps.append(m)
         if neighbor.char == '_' and (neighbor.xCoor, neighbor.yCoor) not in path:
+
             # If the neighbor is the start node
+            # TODO check and make sure it wont go zig zag with end node too
             if (neighbor.xCoor, neighbor.yCoor) == path[0]:
                 valid += 1
             if (neighbor.xCoor - 1, neighbor.yCoor) in path:
@@ -93,6 +98,8 @@ def findPaths(map, startNode, endNode, char):
     count = 0
     for neighbor in startNode.neighbors:
         if neighbor.char == '_':
+            print('first loop')
+            print(neighbor.char)
             position = (neighbor.xCoor, neighbor.yCoor)
             print(position)
             findPath(map, neighbor, [(startNode.xCoor, startNode.yCoor),position], (endNode.xCoor, endNode.yCoor), char)
@@ -104,10 +111,54 @@ def findPaths(map, startNode, endNode, char):
 
 if __name__ == '__main__':
     map, positionDict = readMaze('5x5maze.txt')
-    initMap = map
     addNeighbors(map)
-    printMap(map)
-    findPaths(map, positionDict['B'][0], positionDict['B'][1], 'B')
+    initMap = iMap(map)
+    initMap.printMap()
+    startCoor = positionDict['B'][0]
+    endCoor = positionDict['B'][1]
+    findPaths(initMap, initMap.map[startCoor[1]][startCoor[0]], initMap.map[endCoor[1]][endCoor[0]], 'B')
+    tempMaps = []
+    for m in maps:
+        m.addNeighbors()
+        maps = []
+        tempMaps.append(m)
+
+    for m in tempMaps:
+        startCoor = positionDict['R'][0]
+        endCoor = positionDict['R'][1]
+        findPaths(m, m.map[startCoor[1]][startCoor[0]], m.map[endCoor[1]][endCoor[0]], 'R')
+    tempMaps = []
+    for m in maps:
+        m.addNeighbors()
+        maps = []
+        tempMaps.append(m)
+
+    for m in tempMaps:
+        startCoor = positionDict['O'][0]
+        endCoor = positionDict['O'][1]
+        findPaths(m, m.map[startCoor[1]][startCoor[0]], m.map[endCoor[1]][endCoor[0]], 'O')
+    tempMaps = []
+    for m in maps:
+        m.addNeighbors()
+        maps = []
+        tempMaps.append(m)
+
+    for m in tempMaps:
+        startCoor = positionDict['Y'][0]
+        endCoor = positionDict['Y'][1]
+        findPaths(m, m.map[startCoor[1]][startCoor[0]], m.map[endCoor[1]][endCoor[0]], 'Y')
+    tempMaps = []
+    for m in maps:
+        m.addNeighbors()
+        maps = []
+        tempMaps.append(m)
+
+    for m in tempMaps:
+        startCoor = positionDict['G'][0]
+        endCoor = positionDict['G'][1]
+        findPaths(m, m.map[startCoor[1]][startCoor[0]], m.map[endCoor[1]][endCoor[0]], 'G')
+
+    tempMaps = []
     for m in maps:
         m.printMap()
-        print()
+
