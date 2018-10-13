@@ -6,16 +6,16 @@ from BackTracking.Variable import Variable
 # and the "values" are the paths that are assigned to those variables
 class BackTrackingSearch:
 
-    # the search takes in the initial state of the graph/map, and number of colored paths
+    # the search takes in the initial state of the graph/map, and list of colored paths
     def __init__(self, _graphState, _colorCharacters):
-        self.graphState = _graphState # map of paths: 2D int list
-        self.colorCharacters = _colorCharacters
+        self.graphState = _graphState # map of paths
+        self.colorCharacters = _colorCharacters # list of strings
 
 
     # wrapper method
     def startBacktrack(self):
         # priority queue of variables (connections) that need to be assigned
-        # in basic backtrack, the ordering of the queue won't actually matter
+        # note: in basic backtrack, the ordering of the queue won't actually matter
         varPQ = PriorityQueue()
         # create variables and add them to the priority queue
         for color in self.colorCharacters:
