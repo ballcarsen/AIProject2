@@ -6,7 +6,8 @@ class Path:
     def __init__(self, _pathColor, _coordinateList):
         self.pathColor = _pathColor # character
         self.coordList = _coordinateList
-        self.length = len(_coordinateList)
+        self.length = len(self.coordinateList) # using length of path as a heuristic for value ordering
 
+    # this may need to be tested, greater lengths should be less priority in the queue
     def __lt__(self, other):
-        return self.length < other.length
+        return self.length > other.length
