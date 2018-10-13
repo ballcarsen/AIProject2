@@ -3,7 +3,9 @@ class Variable:
         self.color = _color # character to indicate color e.g. R = red
         self.compareValue = -1 # value to compare different variables for ordering search
 
-    def __lt__(self, other):
+    # may need to test this, if compare value is smaller when there are fewer possible paths,
+    # then this smaller value should be higher priority in the queue
+    def __gt__(self, other):
         return self.compareValue < other.compareValue
 
     # implement heuristic hin this method
