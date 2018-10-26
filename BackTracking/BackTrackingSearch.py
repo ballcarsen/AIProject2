@@ -1,5 +1,6 @@
 from queue import PriorityQueue
 from BackTracking.Variable import Variable
+from BackTracking.Path import Path
 
 
 # note: in this csp, the "variables" are the connections that need to be made
@@ -9,7 +10,7 @@ class BackTrackingSearch:
     # the search takes in the initial state of the graph/map, and list of colored paths
     def __init__(self, _graphState, _colorCharacters):
         self.graphState = _graphState # map of paths
-        self.colorCharacters = _colorCharacters # list of strings
+        self.colorCharacters = _colorCharacters # dictionary of colors and the start and end coordinates
 
 
     # wrapper method
@@ -18,8 +19,8 @@ class BackTrackingSearch:
         # note: in basic backtrack, the ordering of the queue won't actually matter
         varPQ = PriorityQueue()
         # create variables and add them to the priority queue
-        for color in self.colorCharacters:
-            var = Variable(color)
+        for color in self.colorCharacters.keys():
+            var = Variable(color, self.colorCharacters[color][0], self.colorCharacters[color][1])
             var.setCompareVal(self.graphState) # this is where a heuristic could order the queue
             varPQ.put(var)
         # start the backtrack algorithm
@@ -39,18 +40,17 @@ class BackTrackingSearch:
         while not pathPQ.empty():
             path = pathPQ.get() # get path from PQ
             # if the path is valid, assign it to the graph
-            if(self.pathIsValid(path)):
-                self.assignPathToGraph(path)
-                # also update variable priority queue based on new graph state (if using heuristic)
-                varPQ = self.updateVarPQ(varPQ)
-                # recursively call this method to see if it reaches the base case (a solution)
-                viableBranch = self.recursiveBacktrack(varPQ)
-                # if solution was found, keep returning true
-                if viableBranch:
-                    return True
-                else:
-                    # remove path if it's not part of a viable solution
-                    self.removePathFromGraph()
+            self.assignPathToGraph(path)
+            # also update variable priority queue based on new graph state (if using heuristic)
+            varPQ = self.updateVarPQ(varPQ)
+            # recursively call this method to see if it reaches the base case (a solution)
+            viableBranch = self.recursiveBacktrack(varPQ)
+            # if solution was found, keep returning true
+            if viableBranch:
+                return True
+            else:
+                # remove path if it's not part of a viable solution
+                self.removePathFromGraph(path)
         # if no viable branches were found, return false
         return False
 
@@ -58,20 +58,23 @@ class BackTrackingSearch:
     # update priority queue for variables given the current self.graphState
     def updateVarPQ(self, oldPQ):
         newPQ = PriorityQueue()
-        for var in oldPQ:
+        while oldPQ.empty() == False:
+            var = oldPQ.get()
+            # this will update the compare values in other priority queues as well, we might want to make new vars as well
+            # im not sure how this will effect it.
             var.setCompareVal(self.graphState)
             newPQ.put(var)
         return newPQ
 
 
     def assignPathToGraph(self, path):
-        pass
-        # TODO: draws given path on self.graphState
+        for position in path.coordList:
+            self.graphState.map[position[1]][position[0]].char = path.pathColor
 
-    def removePathFromGraph(self):
-        pass
-        # TODO: remove path from self.graphState
 
+    def removePathFromGraph(self, path):
+        for position in path.coordList[1:-1]:
+            self.graphState.map[position[1]][position[0]].char = '_'
 
     # returns a boolean
     def pathIsValid(self, path):
@@ -82,9 +85,51 @@ class BackTrackingSearch:
     # returns a PriorityQueue of Paths
     def getOrderedValues(self, var):
         pathPQ = PriorityQueue()
-        # TODO: fill priority queue with Paths that were found
+        startNode = self.graphState.map[var.startCoor[1]][var.startCoor[0]]
+        endNode = self.graphState.map[var.endCoor[1]][var.endCoor[0]]
+        self.findPath(startNode, [var.startCoor], endNode, pathPQ)
         return pathPQ
 
     def printGraphState(self):
-        pass
+        self.graphState.printMap()
         # TODO: method for printing state of graph
+
+    def findPath(self, node, path, goal, pqRef):
+
+        print("exploring %d %d" % (node.xCoor, node.yCoor))
+        print('length %d' % len(node.neighbors))
+        for neighbor in node.neighbors:
+            valid = 0
+            position = (neighbor.xCoor, neighbor.yCoor)
+            print(position)
+            print(neighbor.char)
+            if position == (goal.xCoor, goal.yCoor):
+                print('goal')
+                path.append((goal.xCoor, goal.yCoor))
+                print('found full path')
+                print(path)
+                p = Path(goal.char, path)
+                pqRef.put(p)
+            else:
+                if neighbor.char == '_' and (neighbor.xCoor, neighbor.yCoor) not in path:
+
+                    # If the neighbor is the start node
+                    # TODO check and make sure it wont go zig zag with end node too
+                    if (neighbor.xCoor, neighbor.yCoor) == path[0]:
+                        valid += 1
+                    if (neighbor.xCoor - 1, neighbor.yCoor) in path:
+                        valid += 1
+                    if (neighbor.xCoor + 1, neighbor.yCoor) in path:
+                        valid += 1
+                    if (neighbor.xCoor, neighbor.yCoor + 1) in path:
+                        valid += 1
+                    if (neighbor.xCoor, neighbor.yCoor - 1) in path:
+                        valid += 1
+
+                    if valid < 2:
+                        print('valid, path so far')
+
+                        copy = [pos for pos in path]
+                        copy.append(position)
+                        print(copy)
+                        self.findPath(neighbor, copy, goal, pqRef)

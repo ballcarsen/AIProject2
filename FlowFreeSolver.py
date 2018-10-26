@@ -1,6 +1,7 @@
-from Node import Node
-from Map import Map
-from Map import iMap
+from BackTracking.Map import Map
+from BackTracking.Map import iMap
+from BackTracking.Node import Node
+
 maps = []
 initMap = None
 def printMap(map):
@@ -110,7 +111,7 @@ def findPaths(map, startNode, endNode, char):
 
 
 if __name__ == '__main__':
-    map, positionDict = readMaze('5x5maze.txt')
+    map, positionDict = readMaze('7x7maze.txt')
     addNeighbors(map)
     initMap = iMap(map)
     initMap.printMap()

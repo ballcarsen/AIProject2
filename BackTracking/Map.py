@@ -1,15 +1,7 @@
-from Node import Node
+from BackTracking.Node import Node
 class Map:
-    def __init__(self, baseMap, path, char = None):
-        self.map = []
-        for row in range(len(baseMap.map)):
-            temp = []
-            for position in baseMap.map[row]:
-                temp.append(Node(position.char, position.yCoor, position.xCoor))
-            self.map.append(temp)
-        if char != None:
-            for position in path:
-                self.map[position[1]][position[0]].char = char
+    def __init__(self, mapArr):
+        self.map = mapArr
 
     def addNeighbors(self):
         for row in self.map:
@@ -42,8 +34,3 @@ class Map:
             for node in row:
                 print(node.char, end='')
             print()
-
-class iMap(Map):
-    def __init__(self, arr):
-        self.map = arr
-
