@@ -1,7 +1,7 @@
 from queue import PriorityQueue
 from BackTracking.Variable import Variable
 from BackTracking.Path import Path
-
+import time
 
 # note: in this csp, the "variables" are the connections that need to be made
 # and the "values" are the paths that are assigned to those variables
@@ -11,6 +11,7 @@ class BackTrackingSearch:
     def __init__(self, _graphState, _colorCharacters):
         self.graphState = _graphState # map of paths
         self.colorCharacters = _colorCharacters # dictionary of colors and the start and end coordinates
+        self.timeSpentFindingPaths = 0
 
 
     # wrapper method
@@ -21,7 +22,12 @@ class BackTrackingSearch:
         # create variables and add them to the priority queue
         for color in self.colorCharacters.keys():
             var = Variable(color, self.colorCharacters[color][0], self.colorCharacters[color][1])
-            var.setCompareVal(self.graphState) # this is where a heuristic could order the queue
+            startTime = time.time()
+            values = self.getOrderedValues(var)
+            endTime = time.time()
+            self.timeSpentFindingPaths += (endTime - startTime)
+            var.setCompareVal(values.qsize()) # this is where a heuristic could order the queue
+            print("done calculating value heuristic for first time")
             varPQ.put(var)
         # start the backtrack algorithm
         self.recursiveBacktrack(varPQ)
@@ -70,7 +76,12 @@ class BackTrackingSearch:
             var = oldPQ.get()
             # this will update the compare values in other priority queues as well, we might want to make new vars as well
             # im not sure how this will effect it.
-            var.setCompareVal(self.graphState)
+            startTime = time.time()
+            values = self.getOrderedValues(var)
+            endTime = time.time()
+            self.timeSpentFindingPaths += (endTime - startTime)
+
+            var.setCompareVal(values.qsize())
             newPQ.put(var)
         #print("new queue length: ", newPQ.qsize())
         return newPQ

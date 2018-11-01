@@ -29,7 +29,7 @@ def readMaze(file_name):
 if __name__ == '__main__':
     # TODO: read in graphState, and fill in color character array
     # This path is gonna be messed up on windows
-    map, positionDict = readMaze('../8x8maze.txt')
+    map, positionDict = readMaze('../9x9maze.txt')
     graphState = Map(map)
     graphState.addNeighbors()
     startTime = time.time()
@@ -37,4 +37,5 @@ if __name__ == '__main__':
     backtrack.startBacktrack()
     endTime = time.time()
     print("run time:", (endTime - startTime))
+    print("time spend finding paths", backtrack.timeSpentFindingPaths)
     backtrack.graphState.printMap()
