@@ -1,6 +1,7 @@
 from BackTracking.BackTrackingSearch import BackTrackingSearch
 from BackTracking.Node import Node
 from BackTracking.Map import Map
+import time
 
 def readMaze(file_name):
     lines = [line.rstrip('\n') for line in open(file_name)]
@@ -21,23 +22,19 @@ def readMaze(file_name):
             # append to row of map
             row.append(node)
         map.append(row)
+    print("pos dict: ", positionDict)
     return map, positionDict
 
 
 if __name__ == '__main__':
     # TODO: read in graphState, and fill in color character array
     # This path is gonna be messed up on windows
-    map, positionDict = readMaze('../5x5maze.txt')
+    map, positionDict = readMaze('../8x8maze.txt')
     graphState = Map(map)
     graphState.addNeighbors()
-
-    mockColors = ["R", "G", "B"] # just a list of the colors to connect
-
-    # In actuality, I think the graph state will be a Map data type from your code
-    mockGraphState = [["B","_", "G"],
-                      ["_", "R", "_"],
-                      ["B", "R", "G"]]
-
+    startTime = time.time()
     backtrack = BackTrackingSearch(graphState, positionDict)
     backtrack.startBacktrack()
+    endTime = time.time()
+    print("run time:", (endTime - startTime))
     backtrack.graphState.printMap()

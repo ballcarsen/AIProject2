@@ -9,5 +9,5 @@ class Path:
         self.length = len(_coordinateList) # using length of path as a heuristic for value ordering
 
     # this may need to be tested, shorter lengths should be higher priority in the queue
-    def __gt__(self, other):
+    def __lt__(self, other):
         return self.length < other.length

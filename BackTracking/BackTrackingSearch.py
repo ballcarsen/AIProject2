@@ -29,11 +29,16 @@ class BackTrackingSearch:
 
     # returns a boolean
     def recursiveBacktrack(self, varPQ):
+
+        #print("var pq length: ", varPQ.qsize())
         # base case: if we've assigned every variable, then return true
         if varPQ.empty():
-            return True
+            #print("*** finished!")
+            return True, varPQ
         # otherwise keep assigning variables
         var = varPQ.get()
+        #print("****  on variable: ", var.color)
+
         # get all possible values (Paths) for the variable, ordered by some heuristic
         pathPQ = self.getOrderedValues(var)
         # while there are still values left to try
@@ -44,19 +49,22 @@ class BackTrackingSearch:
             # also update variable priority queue based on new graph state (if using heuristic)
             varPQ = self.updateVarPQ(varPQ)
             # recursively call this method to see if it reaches the base case (a solution)
-            viableBranch = self.recursiveBacktrack(varPQ)
+            viableBranch, varPQ = self.recursiveBacktrack(varPQ)
             # if solution was found, keep returning true
             if viableBranch:
-                return True
+                return True, varPQ
             else:
                 # remove path if it's not part of a viable solution
                 self.removePathFromGraph(path)
         # if no viable branches were found, return false
-        return False
+        varPQ.put(var)
+        return False, varPQ
 
 
     # update priority queue for variables given the current self.graphState
     def updateVarPQ(self, oldPQ):
+        #return oldPQ
+        #print("old queue length: ", oldPQ.qsize())
         newPQ = PriorityQueue()
         while oldPQ.empty() == False:
             var = oldPQ.get()
@@ -64,6 +72,7 @@ class BackTrackingSearch:
             # im not sure how this will effect it.
             var.setCompareVal(self.graphState)
             newPQ.put(var)
+        #print("new queue length: ", newPQ.qsize())
         return newPQ
 
 
@@ -96,18 +105,18 @@ class BackTrackingSearch:
 
     def findPath(self, node, path, goal, pqRef):
 
-        print("exploring %d %d" % (node.xCoor, node.yCoor))
-        print('length %d' % len(node.neighbors))
+        #print("exploring %d %d" % (node.xCoor, node.yCoor))
+        #print('length %d' % len(node.neighbors))
         for neighbor in node.neighbors:
             valid = 0
             position = (neighbor.xCoor, neighbor.yCoor)
-            print(position)
-            print(neighbor.char)
+            #print(position)
+            #print(neighbor.char)
             if position == (goal.xCoor, goal.yCoor):
-                print('goal')
+                #print('goal')
                 path.append((goal.xCoor, goal.yCoor))
-                print('found full path')
-                print(path)
+                #print('found full path')
+                #print(path)
                 p = Path(goal.char, path)
                 pqRef.put(p)
             else:
@@ -127,9 +136,9 @@ class BackTrackingSearch:
                         valid += 1
 
                     if valid < 2:
-                        print('valid, path so far')
+                        #print('valid, path so far')
 
                         copy = [pos for pos in path]
                         copy.append(position)
-                        print(copy)
+                        #print(copy)
                         self.findPath(neighbor, copy, goal, pqRef)
