@@ -1,6 +1,6 @@
+from BackTracking.PathInterface import PathInterface
 
-
-class Path:
+class HeuristicPath(PathInterface):
 
     # each path has a color, and a list of the coordinates that make up the path
     def __init__(self, _pathColor, _coordinateList):

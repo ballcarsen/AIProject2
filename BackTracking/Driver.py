@@ -2,6 +2,7 @@ from BackTracking.BackTrackingSearch import BackTrackingSearch
 from BackTracking.Node import Node
 from BackTracking.Map import Map
 import time
+import sys
 
 def readMaze(file_name):
     lines = [line.rstrip('\n') for line in open(file_name)]
@@ -22,20 +23,39 @@ def readMaze(file_name):
             # append to row of map
             row.append(node)
         map.append(row)
-    print("pos dict: ", positionDict)
     return map, positionDict
 
 
 if __name__ == '__main__':
-    # TODO: read in graphState, and fill in color character array
+    # print(sys.argv[1:])
     # This path is gonna be messed up on windows
-    map, positionDict = readMaze('../9x9maze.txt')
+    map, positionDict = readMaze(sys.argv[1])
+    useColorHeuristic = False
+    usePathHeuristic = False
+
+    if sys.argv[2] == "True":
+        useColorHeuristic = True
+    elif sys.argv[2] == "False":
+        useColorHeuristic = False
+    else:
+        print("Invalid command line argument for color heuristic")
+
+
+    if sys.argv[3] == "True":
+        usePathHeuristic = True
+    elif sys.argv[3] == "False":
+        usePathHeuristic = False
+    else:
+        print("Invalid command line argument for path heuristic")
+
     graphState = Map(map)
     graphState.addNeighbors()
     startTime = time.time()
-    backtrack = BackTrackingSearch(graphState, positionDict)
+
+    backtrack = BackTrackingSearch(graphState, positionDict, useColorHeuristic, usePathHeuristic)
     backtrack.startBacktrack()
     endTime = time.time()
-    print("run time:", (endTime - startTime))
-    print("time spend finding paths", backtrack.timeSpentFindingPaths)
+    print("run time: %.3f" %(endTime - startTime))
+    print("time spent on color heuristic: %.3f \n" %backtrack.timeSpentFindingPaths)
+    print("number of edges traversed:", backtrack.numEdges, "\n")
     backtrack.graphState.printMap()

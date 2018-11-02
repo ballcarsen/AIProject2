@@ -1,4 +1,7 @@
-class Variable:
+import time
+from BackTracking.VariableInterface import VariableInterface
+
+class SimpleVariable(VariableInterface):
     def __init__(self, _color, startCoor, endCoor):
         self.color = _color # character to indicate color e.g. R = red
         self.compareValue = -1 # value to compare different variables for ordering search
@@ -9,8 +12,7 @@ class Variable:
     # then this smaller value should be higher priority in the queue
     def __lt__(self, other):
         return self.compareValue < other.compareValue
-
-    # implement heuristic hin this method
-    def setCompareVal(self, newValue):
-        self.compareValue = newValue
-        # TODO: set compare value equal to the number of paths (values) that can be generated for this variable
+    #
+    # # implement heuristic hin this method
+    def setCompareVal(self, bts):
+        pass

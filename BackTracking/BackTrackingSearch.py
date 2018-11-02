@@ -1,6 +1,8 @@
 from queue import PriorityQueue
-from BackTracking.Variable import Variable
-from BackTracking.Path import Path
+from BackTracking.HeuristicVariable import HeuristicVariable
+from BackTracking.SimpleVariable import SimpleVariable
+from BackTracking.HeuristicPath import HeuristicPath
+from BackTracking.SimplePath import SimplePath
 import time
 
 # note: in this csp, the "variables" are the connections that need to be made
@@ -8,10 +10,15 @@ import time
 class BackTrackingSearch:
 
     # the search takes in the initial state of the graph/map, and list of colored paths
-    def __init__(self, _graphState, _colorCharacters):
+    def __init__(self, _graphState, _colorCharacters, colorHeuristic, pathHeuristic):
         self.graphState = _graphState # map of paths
         self.colorCharacters = _colorCharacters # dictionary of colors and the start and end coordinates
         self.timeSpentFindingPaths = 0
+        self.useVariableHeuristic = colorHeuristic
+        self.usePathHeuristic = pathHeuristic
+        print("variable (color choice) heuristic:", self.useVariableHeuristic)
+        print("value (path choice) heuristic:", self.usePathHeuristic, "\n")
+        self.numEdges = 0
 
 
     # wrapper method
@@ -21,13 +28,11 @@ class BackTrackingSearch:
         varPQ = PriorityQueue()
         # create variables and add them to the priority queue
         for color in self.colorCharacters.keys():
-            var = Variable(color, self.colorCharacters[color][0], self.colorCharacters[color][1])
-            startTime = time.time()
-            values = self.getOrderedValues(var)
-            endTime = time.time()
-            self.timeSpentFindingPaths += (endTime - startTime)
-            var.setCompareVal(values.qsize()) # this is where a heuristic could order the queue
-            print("done calculating value heuristic for first time")
+            if  self.useVariableHeuristic:
+                var = HeuristicVariable(color, self.colorCharacters[color][0], self.colorCharacters[color][1])
+            else:
+                var = SimpleVariable(color, self.colorCharacters[color][0], self.colorCharacters[color][1])
+            var.setCompareVal(self) # this is where a heuristic could order the queue
             varPQ.put(var)
         # start the backtrack algorithm
         self.recursiveBacktrack(varPQ)
@@ -49,6 +54,7 @@ class BackTrackingSearch:
         pathPQ = self.getOrderedValues(var)
         # while there are still values left to try
         while not pathPQ.empty():
+            self.numEdges += 1
             path = pathPQ.get() # get path from PQ
             # if the path is valid, assign it to the graph
             self.assignPathToGraph(path)
@@ -76,12 +82,7 @@ class BackTrackingSearch:
             var = oldPQ.get()
             # this will update the compare values in other priority queues as well, we might want to make new vars as well
             # im not sure how this will effect it.
-            startTime = time.time()
-            values = self.getOrderedValues(var)
-            endTime = time.time()
-            self.timeSpentFindingPaths += (endTime - startTime)
-
-            var.setCompareVal(values.qsize())
+            var.setCompareVal(self)
             newPQ.put(var)
         #print("new queue length: ", newPQ.qsize())
         return newPQ
@@ -128,7 +129,10 @@ class BackTrackingSearch:
                 path.append((goal.xCoor, goal.yCoor))
                 #print('found full path')
                 #print(path)
-                p = Path(goal.char, path)
+                if(self.usePathHeuristic):
+                    p = HeuristicPath(goal.char, path)
+                else:
+                    p = SimplePath(goal.char, path)
                 pqRef.put(p)
             else:
                 if neighbor.char == '_' and (neighbor.xCoor, neighbor.yCoor) not in path:
