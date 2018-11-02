@@ -27,7 +27,7 @@ def readMaze(file_name):
 
 
 if __name__ == '__main__':
-    # print(sys.argv[1:])
+    #print(sys.argv[1:])
     # This path is gonna be messed up on windows
     map, positionDict = readMaze(sys.argv[1])
     useColorHeuristic = False
@@ -48,6 +48,7 @@ if __name__ == '__main__':
     else:
         print("Invalid command line argument for path heuristic")
 
+    print("File used: " + sys.argv[1])
     graphState = Map(map)
     graphState.addNeighbors()
     startTime = time.time()
@@ -56,6 +57,6 @@ if __name__ == '__main__':
     backtrack.startBacktrack()
     endTime = time.time()
     print("run time: %.3f" %(endTime - startTime))
-    print("time spent on color heuristic: %.3f \n" %backtrack.timeSpentFindingPaths)
+    print("time spend finding paths: %.3f \n" %backtrack.timeSpentFindingPaths)
     print("number of edges traversed:", backtrack.numEdges, "\n")
     backtrack.graphState.printMap()

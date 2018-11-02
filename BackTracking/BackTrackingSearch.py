@@ -1,8 +1,9 @@
 from queue import PriorityQueue
-from BackTracking.HeuristicVariable import HeuristicVariable
+from BackTracking.ConstrainedHeuristicVariable import ConstrainedHeuristicVariable
 from BackTracking.SimpleVariable import SimpleVariable
 from BackTracking.HeuristicPath import HeuristicPath
 from BackTracking.SimplePath import SimplePath
+from BackTracking.DistHeurisitcVariable import DistHeuristicVariable
 import time
 
 # note: in this csp, the "variables" are the connections that need to be made
@@ -29,7 +30,7 @@ class BackTrackingSearch:
         # create variables and add them to the priority queue
         for color in self.colorCharacters.keys():
             if  self.useVariableHeuristic:
-                var = HeuristicVariable(color, self.colorCharacters[color][0], self.colorCharacters[color][1])
+                var = ConstrainedHeuristicVariable(color, self.colorCharacters[color][0], self.colorCharacters[color][1])
             else:
                 var = SimpleVariable(color, self.colorCharacters[color][0], self.colorCharacters[color][1])
             var.setCompareVal(self) # this is where a heuristic could order the queue
@@ -136,24 +137,26 @@ class BackTrackingSearch:
                 pqRef.put(p)
             else:
                 if neighbor.char == '_' and (neighbor.xCoor, neighbor.yCoor) not in path:
-
+                    copy = []
                     # If the neighbor is the start node
-                    # TODO check and make sure it wont go zig zag with end node too
                     if (neighbor.xCoor, neighbor.yCoor) == path[0]:
                         valid += 1
-                    if (neighbor.xCoor - 1, neighbor.yCoor) in path:
-                        valid += 1
-                    if (neighbor.xCoor + 1, neighbor.yCoor) in path:
-                        valid += 1
-                    if (neighbor.xCoor, neighbor.yCoor + 1) in path:
-                        valid += 1
-                    if (neighbor.xCoor, neighbor.yCoor - 1) in path:
-                        valid += 1
+                    for coordinate in path:
+                        if(coordinate == (neighbor.xCoor - 1, neighbor.yCoor)):
+                            valid += 1
+                        if (coordinate == (neighbor.xCoor + 1, neighbor.yCoor)):
+                            valid += 1
+                        if (coordinate == (neighbor.xCoor, neighbor.yCoor - 1)):
+                            valid += 1
+                        if (coordinate == (neighbor.xCoor, neighbor.yCoor + 1)):
+                            valid += 1
+                        copy.append(coordinate)
+
+                    # TODO check and make sure it wont go zig zag with end node too
 
                     if valid < 2:
                         #print('valid, path so far')
 
-                        copy = [pos for pos in path]
                         copy.append(position)
                         #print(copy)
                         self.findPath(neighbor, copy, goal, pqRef)

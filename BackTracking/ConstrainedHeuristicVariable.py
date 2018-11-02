@@ -1,7 +1,7 @@
 import time
 from BackTracking.VariableInterface import VariableInterface
 
-class HeuristicVariable(VariableInterface):
+class ConstrainedHeuristicVariable(VariableInterface):
     def __init__(self, _color, startCoor, endCoor):
         self.color = _color # character to indicate color e.g. R = red
         self.compareValue = -1 # value to compare different variables for ordering search
