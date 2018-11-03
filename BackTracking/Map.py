@@ -34,3 +34,4 @@ class Map:
             for node in row:
                 print(node.char, end='')
             print()
+        print()

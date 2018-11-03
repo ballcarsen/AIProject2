@@ -1,0 +1,113 @@
+File used: 5x5maze.txt
+variable (color choice) heuristic: False
+value (path choice) heuristic: False
+run time: 0.000 
+time spend finding paths: 0.000 
+number of edges traversed: 21
+
+File used: 5x5maze.txt
+variable (color choice) heuristic: False
+value (path choice) heuristic: True
+run time: 0.000 
+time spend finding paths: 0.000 
+number of edges traversed: 5
+
+File used: 5x5maze.txt
+variable (color choice) heuristic: True
+value (path choice) heuristic: False
+run time: 0.000 
+time spend finding paths: 0.000 
+number of edges traversed: 8
+
+File used: 5x5maze.txt
+variable (color choice) heuristic: True
+value (path choice) heuristic: True
+run time: 0.016 
+time spend finding paths: 0.016 
+number of edges traversed: 5
+
+
+***********************************
+File used: 7x7maze.txt
+variable (color choice) heuristic: False
+value (path choice) heuristic: False
+run time: 0.312 
+time spend finding paths: 0.000 
+number of edges traversed: 661
+
+File used: 7x7maze.txt
+variable (color choice) heuristic: False
+value (path choice) heuristic: True
+run time: 0.360 
+time spend finding paths: 0.000 
+number of edges traversed: 626
+
+File used: 7x7maze.txt
+variable (color choice) heuristic: True
+value (path choice) heuristic: False
+run time: 1.969 
+time spend finding paths: 1.625 
+number of edges traversed: 231
+
+File used: 7x7maze.txt
+variable (color choice) heuristic: True
+value (path choice) heuristic: True
+run time: 1.532 
+time spend finding paths: 1.282 
+number of edges traversed: 91
+
+
+***********************************
+File used: 8x8maze.txt
+variable (color choice) heuristic: False
+value (path choice) heuristic: False
+run time: 4.469 
+time spend finding paths: 0.000 
+number of edges traversed: 8811
+
+File used: 8x8maze.txt
+variable (color choice) heuristic: False
+value (path choice) heuristic: True
+run time: 1.547 
+time spend finding paths: 0.000 
+number of edges traversed: 432
+
+File used: 8x8maze.txt
+variable (color choice) heuristic: True
+value (path choice) heuristic: False
+run time: 12.705 
+time spend finding paths: 11.657 
+number of edges traversed: 1166
+
+File used: 8x8maze.txt
+variable (color choice) heuristic: True
+value (path choice) heuristic: True
+run time: 5.219 
+time spend finding paths: 4.985 
+number of edges traversed: 7
+
+
+***********************************
+File used: 9x9maze.txt
+variable (color choice) heuristic: False
+value (path choice) heuristic: False
+run time: 144.671 
+time spend finding paths: 0.000 
+number of edges traversed: 293492
+
+File used: 9x9maze.txt
+variable (color choice) heuristic: False
+value (path choice) heuristic: True
+run time: 8.719 
+time spend finding paths: 0.000 
+number of edges traversed: 428
+
+File used: 9x9maze.txt
+variable (color choice) heuristic: True
+value (path choice) heuristic: True
+run time: 162.046 
+time spend finding paths: 154.186 
+number of edges traversed: 176
+
+
+***********************************

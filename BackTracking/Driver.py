@@ -27,6 +27,7 @@ def readMaze(file_name):
 
 
 if __name__ == '__main__':
+    f = open("./results.txt", "a")
     #print(sys.argv[1:])
     # This path is gonna be messed up on windows
     map, positionDict = readMaze(sys.argv[1])
@@ -40,7 +41,6 @@ if __name__ == '__main__':
     else:
         print("Invalid command line argument for color heuristic")
 
-
     if sys.argv[3] == "True":
         usePathHeuristic = True
     elif sys.argv[3] == "False":
@@ -49,6 +49,12 @@ if __name__ == '__main__':
         print("Invalid command line argument for path heuristic")
 
     print("File used: " + sys.argv[1])
+    f.write("File used: " + sys.argv[1] + "\n")
+    f.write("variable (color choice) heuristic: " + useColorHeuristic.__str__() + "\n")
+    f.write("value (path choice) heuristic: " + usePathHeuristic.__str__() +  "\n")
+
+
+
     graphState = Map(map)
     graphState.addNeighbors()
     startTime = time.time()
@@ -57,6 +63,9 @@ if __name__ == '__main__':
     backtrack.startBacktrack()
     endTime = time.time()
     print("run time: %.3f" %(endTime - startTime))
+    f.write("run time: %.3f \n" %(endTime - startTime))
     print("time spend finding paths: %.3f \n" %backtrack.timeSpentFindingPaths)
-    print("number of edges traversed:", backtrack.numEdges, "\n")
+    f.write("time spend finding paths: %.3f \n" %backtrack.timeSpentFindingPaths)
+    print("number of edges traversed: " + backtrack.numEdges.__str__() + "\n")
+    f.write("number of edges traversed: " + backtrack.numEdges.__str__() + "\n\n")
     backtrack.graphState.printMap()
