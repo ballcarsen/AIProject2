@@ -20,3 +20,4 @@ class ConstrainedHeuristicVariable(VariableInterface):
         endTime = time.time()
         bts.timeSpentFindingPaths += (endTime - startTime)
         self.compareValue = values.qsize()
+        return True

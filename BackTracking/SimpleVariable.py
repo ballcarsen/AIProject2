@@ -15,4 +15,4 @@ class SimpleVariable(VariableInterface):
     #
     # # implement heuristic hin this method
     def setCompareVal(self, bts):
-        pass
+        return True

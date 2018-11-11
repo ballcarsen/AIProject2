@@ -3,6 +3,8 @@ from BackTracking.Node import Node
 from BackTracking.Map import Map
 import time
 import sys
+from BackTracking.BackTrackingSearch import VarHeuristicType
+
 
 def readMaze(file_name):
     lines = [line.rstrip('\n') for line in open(file_name)]
@@ -31,13 +33,16 @@ if __name__ == '__main__':
     #print(sys.argv[1:])
     # This path is gonna be messed up on windows
     map, positionDict = readMaze(sys.argv[1])
-    useColorHeuristic = False
+    colorHeuristic = VarHeuristicType.NONE
     usePathHeuristic = False
 
-    if sys.argv[2] == "True":
-        useColorHeuristic = True
-    elif sys.argv[2] == "False":
-        useColorHeuristic = False
+    # now the second arguement must be "None" or "Constrained" or "Adjacent" (the new one)
+    if sys.argv[2] == "None":
+        colorHeuristic = VarHeuristicType.NONE
+    elif sys.argv[2] == "Constrained":
+        colorHeuristic = VarHeuristicType.MOSTCONSTRAINED
+    elif sys.argv[2] == "Adjacent":
+        colorHeuristic = VarHeuristicType.ADJACENTCOLORS
     else:
         print("Invalid command line argument for color heuristic")
 
@@ -50,7 +55,7 @@ if __name__ == '__main__':
 
     print("File used: " + sys.argv[1])
     f.write("File used: " + sys.argv[1] + "\n")
-    f.write("variable (color choice) heuristic: " + useColorHeuristic.__str__() + "\n")
+    f.write("variable (color choice) heuristic: " + sys.argv[2] + "\n")
     f.write("value (path choice) heuristic: " + usePathHeuristic.__str__() +  "\n")
 
 
@@ -59,7 +64,7 @@ if __name__ == '__main__':
     graphState.addNeighbors()
     startTime = time.time()
 
-    backtrack = BackTrackingSearch(graphState, positionDict, useColorHeuristic, usePathHeuristic)
+    backtrack = BackTrackingSearch(graphState, positionDict, colorHeuristic, usePathHeuristic)
     backtrack.startBacktrack()
     endTime = time.time()
     print("run time: %.3f" %(endTime - startTime))

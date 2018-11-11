@@ -3,8 +3,16 @@ from BackTracking.ConstrainedHeuristicVariable import ConstrainedHeuristicVariab
 from BackTracking.SimpleVariable import SimpleVariable
 from BackTracking.HeuristicPath import HeuristicPath
 from BackTracking.SimplePath import SimplePath
-from BackTracking.DistHeurisitcVariable import DistHeuristicVariable
+from BackTracking.AdjacentHeuristicVariable import AdjacentHeuristicVariable
 import time
+
+from enum import Enum
+
+class VarHeuristicType(Enum):
+    NONE = 0
+    MOSTCONSTRAINED = 1
+    ADJACENTCOLORS = 2
+
 
 # note: in this csp, the "variables" are the connections that need to be made
 # and the "values" are the paths that are assigned to those variables
@@ -15,11 +23,12 @@ class BackTrackingSearch:
         self.graphState = _graphState # map of paths
         self.colorCharacters = _colorCharacters # dictionary of colors and the start and end coordinates
         self.timeSpentFindingPaths = 0
-        self.useVariableHeuristic = colorHeuristic
+        self.colorHeuristic = colorHeuristic
         self.usePathHeuristic = pathHeuristic
-        print("variable (color choice) heuristic:", self.useVariableHeuristic)
+        print("variable (color choice) heuristic:", self.colorHeuristic)
         print("value (path choice) heuristic:", self.usePathHeuristic, "\n")
         self.numEdges = 0
+        self.pathsFound = 0
 
 
     # wrapper method
@@ -29,10 +38,14 @@ class BackTrackingSearch:
         varPQ = PriorityQueue()
         # create variables and add them to the priority queue
         for color in self.colorCharacters.keys():
-            if  self.useVariableHeuristic:
+            var = None
+            if  self.colorHeuristic == VarHeuristicType.ADJACENTCOLORS:
+                var = AdjacentHeuristicVariable(color, self.colorCharacters[color][0], self.colorCharacters[color][1])
+            elif self.colorHeuristic == VarHeuristicType.MOSTCONSTRAINED:
                 var = ConstrainedHeuristicVariable(color, self.colorCharacters[color][0], self.colorCharacters[color][1])
-            else:
+            elif self.colorHeuristic == VarHeuristicType.NONE:
                 var = SimpleVariable(color, self.colorCharacters[color][0], self.colorCharacters[color][1])
+
             var.setCompareVal(self) # this is where a heuristic could order the queue
             varPQ.put(var)
         # start the backtrack algorithm
@@ -49,7 +62,7 @@ class BackTrackingSearch:
             return True, varPQ
         # otherwise keep assigning variables
         var = varPQ.get()
-        #print("****  on variable: ", var.color)
+        # print("****  on variable: ", var.color)
 
         # get all possible values (Paths) for the variable, ordered by some heuristic
         pathPQ = self.getOrderedValues(var)
@@ -59,10 +72,16 @@ class BackTrackingSearch:
             path = pathPQ.get() # get path from PQ
             # if the path is valid, assign it to the graph
             self.assignPathToGraph(path)
+            #print("new Path:")
+            #self.graphState.printMap()
             # also update variable priority queue based on new graph state (if using heuristic)
-            varPQ = self.updateVarPQ(varPQ)
-            # recursively call this method to see if it reaches the base case (a solution)
-            viableBranch, varPQ = self.recursiveBacktrack(varPQ)
+            #print("updating variables")
+            varPQ, viableBranch = self.updateVarPQ(varPQ)
+            if viableBranch:
+                # recursively call this method to see if it reaches the base case (a solution)
+                viableBranch, varPQ = self.recursiveBacktrack(varPQ)
+            #else:
+                #print("caught invalid assignment")
             # if solution was found, keep returning true
             if viableBranch:
                 return True, varPQ
@@ -71,11 +90,13 @@ class BackTrackingSearch:
                 self.removePathFromGraph(path)
         # if no viable branches were found, return false
         varPQ.put(var)
+        #print("no paths found")
         return False, varPQ
 
 
     # update priority queue for variables given the current self.graphState
     def updateVarPQ(self, oldPQ):
+        validAssignment = True
         #return oldPQ
         #print("old queue length: ", oldPQ.qsize())
         newPQ = PriorityQueue()
@@ -83,10 +104,13 @@ class BackTrackingSearch:
             var = oldPQ.get()
             # this will update the compare values in other priority queues as well, we might want to make new vars as well
             # im not sure how this will effect it.
-            var.setCompareVal(self)
+            valid = var.setCompareVal(self)
+            if not valid:
+                validAssignment = False
             newPQ.put(var)
         #print("new queue length: ", newPQ.qsize())
-        return newPQ
+
+        return newPQ, validAssignment
 
 
     def assignPathToGraph(self, path):
@@ -130,6 +154,8 @@ class BackTrackingSearch:
                 path.append((goal.xCoor, goal.yCoor))
                 #print('found full path')
                 #print(path)
+                self.pathsFound += 1
+                #print("paths found:", self.pathsFound)
                 if(self.usePathHeuristic):
                     p = HeuristicPath(goal.char, path)
                 else:
