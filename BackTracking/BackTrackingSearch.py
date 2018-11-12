@@ -133,15 +133,16 @@ class BackTrackingSearch:
         pathPQ = PriorityQueue()
         startNode = self.graphState.map[var.startCoor[1]][var.startCoor[0]]
         endNode = self.graphState.map[var.endCoor[1]][var.endCoor[0]]
-        self.findPath(startNode, [var.startCoor], endNode, pathPQ)
+        self.findPath(startNode, [var.startCoor], endNode, pathPQ, 0)
         return pathPQ
 
     def printGraphState(self):
         self.graphState.printMap()
         # TODO: method for printing state of graph
 
-    def findPath(self, node, path, goal, pqRef):
-
+    def findPath(self, node, path, goal, pqRef, pathLength):
+        if pathLength > 21:
+           return
         #print("exploring %d %d" % (node.xCoor, node.yCoor))
         #print('length %d' % len(node.neighbors))
         for neighbor in node.neighbors:
@@ -163,6 +164,7 @@ class BackTrackingSearch:
                 pqRef.put(p)
             else:
                 if neighbor.char == '_' and (neighbor.xCoor, neighbor.yCoor) not in path:
+
                     copy = []
                     # If the neighbor is the start node
                     if (neighbor.xCoor, neighbor.yCoor) == path[0]:
@@ -185,4 +187,4 @@ class BackTrackingSearch:
 
                         copy.append(position)
                         #print(copy)
-                        self.findPath(neighbor, copy, goal, pqRef)
+                        self.findPath(neighbor, copy, goal, pqRef, pathLength + 1)
