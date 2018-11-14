@@ -1,42 +1,42 @@
 File used: 5x5maze.txt
 variable (color choice) heuristic: None
 value (path choice) heuristic: False
-run time: 0.004 
+run time: 0.001 
 time spend finding paths: 0.000 
-number of edges traversed: 21
+number of edges traversed: 14
 
 File used: 5x5maze.txt
 variable (color choice) heuristic: None
 value (path choice) heuristic: True
-run time: 0.002 
+run time: 0.001 
 time spend finding paths: 0.000 
 number of edges traversed: 5
 
 File used: 5x5maze.txt
 variable (color choice) heuristic: Constrained
 value (path choice) heuristic: False
-run time: 0.009 
-time spend finding paths: 0.009 
-number of edges traversed: 8
+run time: 0.002 
+time spend finding paths: 0.001 
+number of edges traversed: 6
 
 File used: 5x5maze.txt
 variable (color choice) heuristic: Constrained
 value (path choice) heuristic: True
-run time: 0.009 
-time spend finding paths: 0.009 
+run time: 0.002 
+time spend finding paths: 0.002 
 number of edges traversed: 5
 
 File used: 5x5maze.txt
 variable (color choice) heuristic: Adjacent
 value (path choice) heuristic: False
-run time: 0.000 
+run time: 0.001 
 time spend finding paths: 0.000 
 number of edges traversed: 7
 
 File used: 5x5maze.txt
 variable (color choice) heuristic: Adjacent
 value (path choice) heuristic: True
-run time: 0.002 
+run time: 0.001 
 time spend finding paths: 0.000 
 number of edges traversed: 5
 
@@ -45,86 +45,86 @@ number of edges traversed: 5
 File used: 7x7maze.txt
 variable (color choice) heuristic: None
 value (path choice) heuristic: False
-run time: 0.742 
+run time: 0.161 
 time spend finding paths: 0.000 
-number of edges traversed: 661
+number of edges traversed: 483
 
 File used: 7x7maze.txt
 variable (color choice) heuristic: None
 value (path choice) heuristic: True
-run time: 0.816 
+run time: 0.098 
 time spend finding paths: 0.000 
-number of edges traversed: 626
+number of edges traversed: 276
 
 File used: 7x7maze.txt
 variable (color choice) heuristic: Constrained
 value (path choice) heuristic: False
-run time: 4.560 
-time spend finding paths: 3.729 
-number of edges traversed: 231
+run time: 0.745 
+time spend finding paths: 0.592 
+number of edges traversed: 171
 
 File used: 7x7maze.txt
 variable (color choice) heuristic: Constrained
 value (path choice) heuristic: True
-run time: 3.631 
-time spend finding paths: 3.003 
-number of edges traversed: 91
+run time: 0.586 
+time spend finding paths: 0.466 
+number of edges traversed: 64
 
 File used: 7x7maze.txt
 variable (color choice) heuristic: Adjacent
 value (path choice) heuristic: False
-run time: 0.426 
+run time: 0.080 
 time spend finding paths: 0.000 
-number of edges traversed: 193
+number of edges traversed: 147
 
 File used: 7x7maze.txt
 variable (color choice) heuristic: Adjacent
 value (path choice) heuristic: True
-run time: 0.329 
+run time: 0.057 
 time spend finding paths: 0.000 
-number of edges traversed: 43
+number of edges traversed: 27
 
 
 ***********************************
 File used: 8x8maze.txt
 variable (color choice) heuristic: None
 value (path choice) heuristic: False
-run time: 10.688 
+run time: 0.949 
 time spend finding paths: 0.000 
-number of edges traversed: 8811
+number of edges traversed: 3972
 
 File used: 8x8maze.txt
 variable (color choice) heuristic: None
 value (path choice) heuristic: True
-run time: 3.831 
+run time: 0.257 
 time spend finding paths: 0.000 
-number of edges traversed: 432
+number of edges traversed: 130
 
 File used: 8x8maze.txt
 variable (color choice) heuristic: Constrained
 value (path choice) heuristic: False
-run time: 30.556 
-time spend finding paths: 27.823 
-number of edges traversed: 1166
+run time: 4.396 
+time spend finding paths: 3.915 
+number of edges traversed: 727
 
 File used: 8x8maze.txt
 variable (color choice) heuristic: Constrained
 value (path choice) heuristic: True
-run time: 12.698 
-time spend finding paths: 12.142 
-number of edges traversed: 7
+run time: 1.640 
+time spend finding paths: 1.540 
+number of edges traversed: 88
 
 File used: 8x8maze.txt
 variable (color choice) heuristic: Adjacent
 value (path choice) heuristic: False
-run time: 1.085 
+run time: 0.160 
 time spend finding paths: 0.000 
-number of edges traversed: 115
+number of edges traversed: 111
 
 File used: 8x8maze.txt
 variable (color choice) heuristic: Adjacent
 value (path choice) heuristic: True
-run time: 1.081 
+run time: 0.138 
 time spend finding paths: 0.000 
 number of edges traversed: 22
 
@@ -133,41 +133,45 @@ number of edges traversed: 22
 File used: 9x9maze.txt
 variable (color choice) heuristic: None
 value (path choice) heuristic: False
-run time: 380.420 
+run time: 94.549 
 time spend finding paths: 0.000 
-number of edges traversed: 293492
+number of edges traversed: 213126
 
 File used: 9x9maze.txt
 variable (color choice) heuristic: None
 value (path choice) heuristic: True
-run time: 24.357 
+run time: 4.612 
 time spend finding paths: 0.000 
-number of edges traversed: 428
+number of edges traversed: 85
 
 File used: 9x9maze.txt
 variable (color choice) heuristic: Adjacent
 value (path choice) heuristic: False
-run time: 62.377 
+run time: 15.150 
 time spend finding paths: 0.000 
-number of edges traversed: 24872
+number of edges traversed: 23924
 
 File used: 9x9maze.txt
 variable (color choice) heuristic: Adjacent
 value (path choice) heuristic: True
-run time: 62.230 
+run time: 15.970 
 time spend finding paths: 0.000 
-number of edges traversed: 14409
+number of edges traversed: 13191
 
 
 ***********************************
 File used: 10x10maze.txt
-variable (color choice) heuristic: None
-value (path choice) heuristic: True
-File used: 10x10maze.txt
 variable (color choice) heuristic: Adjacent
+value (path choice) heuristic: True
+run time: 14141.058
+time spend finding paths: 0.000
+number of edges traversed: 15477666
+
+
+***********************************File used: 9x9maze.txt
+variable (color choice) heuristic: Constrained
 value (path choice) heuristic: False
-File used: 10x10maze.txt
-variable (color choice) heuristic: Adjacent
-value (path choice) heuristic: True
+run time: 148.149 
+time spend finding paths: 130.733 
+number of edges traversed: 4754
 
-***********************************

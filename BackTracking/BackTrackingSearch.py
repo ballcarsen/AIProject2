@@ -4,7 +4,6 @@ from BackTracking.SimpleVariable import SimpleVariable
 from BackTracking.HeuristicPath import HeuristicPath
 from BackTracking.SimplePath import SimplePath
 from BackTracking.AdjacentHeuristicVariable import AdjacentHeuristicVariable
-import time
 
 from enum import Enum
 
@@ -59,10 +58,12 @@ class BackTrackingSearch:
         # base case: if we've assigned every variable, then return true
         if varPQ.empty():
             #print("*** finished!")
-            return True, varPQ
+            if not self.graphState.hasBlankSpots():
+                return True, varPQ
+            else:
+                return False, varPQ
         # otherwise keep assigning variables
         var = varPQ.get()
-        # print("****  on variable: ", var.color)
 
         # get all possible values (Paths) for the variable, ordered by some heuristic
         pathPQ = self.getOrderedValues(var)
@@ -72,16 +73,11 @@ class BackTrackingSearch:
             path = pathPQ.get() # get path from PQ
             # if the path is valid, assign it to the graph
             self.assignPathToGraph(path)
-            #print("new Path:")
-            #self.graphState.printMap()
             # also update variable priority queue based on new graph state (if using heuristic)
-            #print("updating variables")
             varPQ, viableBranch = self.updateVarPQ(varPQ)
             if viableBranch:
                 # recursively call this method to see if it reaches the base case (a solution)
                 viableBranch, varPQ = self.recursiveBacktrack(varPQ)
-            #else:
-                #print("caught invalid assignment")
             # if solution was found, keep returning true
             if viableBranch:
                 return True, varPQ
@@ -97,19 +93,13 @@ class BackTrackingSearch:
     # update priority queue for variables given the current self.graphState
     def updateVarPQ(self, oldPQ):
         validAssignment = True
-        #return oldPQ
-        #print("old queue length: ", oldPQ.qsize())
         newPQ = PriorityQueue()
         while oldPQ.empty() == False:
             var = oldPQ.get()
-            # this will update the compare values in other priority queues as well, we might want to make new vars as well
-            # im not sure how this will effect it.
             valid = var.setCompareVal(self)
             if not valid:
                 validAssignment = False
             newPQ.put(var)
-        #print("new queue length: ", newPQ.qsize())
-
         return newPQ, validAssignment
 
 
@@ -121,11 +111,6 @@ class BackTrackingSearch:
     def removePathFromGraph(self, path):
         for position in path.coordList[1:-1]:
             self.graphState.map[position[1]][position[0]].char = '_'
-
-    # returns a boolean
-    def pathIsValid(self, path):
-        pass
-        # TODO: check path validity against the self.graphState
 
 
     # returns a PriorityQueue of Paths
@@ -141,34 +126,26 @@ class BackTrackingSearch:
         # TODO: method for printing state of graph
 
     def findPath(self, node, path, goal, pqRef, pathLength):
-        if pathLength > 21:
+        if pathLength > 40:
            return
-        #print("exploring %d %d" % (node.xCoor, node.yCoor))
-        #print('length %d' % len(node.neighbors))
-        for neighbor in node.neighbors:
-            valid = 0
-            position = (neighbor.xCoor, neighbor.yCoor)
-            #print(position)
-            #print(neighbor.char)
-            if position == (goal.xCoor, goal.yCoor):
-                #print('goal')
-                path.append((goal.xCoor, goal.yCoor))
-                #print('found full path')
-                #print(path)
-                self.pathsFound += 1
-                #print("paths found:", self.pathsFound)
-                if(self.usePathHeuristic):
-                    p = HeuristicPath(goal.char, path)
-                else:
-                    p = SimplePath(goal.char, path)
-                pqRef.put(p)
+        neighbor_coordinates = [(neighbor.xCoor, neighbor.yCoor) for neighbor in node.neighbors]
+        # If one of the neighbors is the goal, return the path, all other neighbors will result in invalid paths
+        if (goal.xCoor, goal.yCoor) in neighbor_coordinates:
+            path.append((goal.xCoor, goal.yCoor))
+            if (self.usePathHeuristic):
+                p = HeuristicPath(goal.char, path)
             else:
+                p = SimplePath(goal.char, path)
+            pqRef.put(p)
+        elif len(path) < 40:
+            # Traverse the neighbors
+            for neighbor in node.neighbors:
+                valid = 0
+                position = (neighbor.xCoor, neighbor.yCoor)
                 if neighbor.char == '_' and (neighbor.xCoor, neighbor.yCoor) not in path:
 
                     copy = []
                     # If the neighbor is the start node
-                    if (neighbor.xCoor, neighbor.yCoor) == path[0]:
-                        valid += 1
                     for coordinate in path:
                         if(coordinate == (neighbor.xCoor - 1, neighbor.yCoor)):
                             valid += 1
@@ -179,12 +156,8 @@ class BackTrackingSearch:
                         if (coordinate == (neighbor.xCoor, neighbor.yCoor + 1)):
                             valid += 1
                         copy.append(coordinate)
-
-                    # TODO check and make sure it wont go zig zag with end node too
-
+                    # Adding the neighbor to the path will not result in an invalid path so far
                     if valid < 2:
-                        #print('valid, path so far')
-
                         copy.append(position)
                         #print(copy)
                         self.findPath(neighbor, copy, goal, pqRef, pathLength + 1)
