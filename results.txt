@@ -145,6 +145,20 @@ time spend finding paths: 0.000
 number of edges traversed: 85
 
 File used: 9x9maze.txt
+variable (color choice) heuristic: Constrained
+value (path choice) heuristic: False
+run time: 148.149
+time spend finding paths: 130.733
+number of edges traversed: 4754
+
+File used: 9x9maze.txt
+variable (color choice) heuristic: Constrained
+value (path choice) heuristic: True
+run time: 83.922
+time spend finding paths: 79.654
+number of edges traversed: 167
+
+File used: 9x9maze.txt
 variable (color choice) heuristic: Adjacent
 value (path choice) heuristic: False
 run time: 15.150 
@@ -168,10 +182,6 @@ time spend finding paths: 0.000
 number of edges traversed: 15477666
 
 
-***********************************File used: 9x9maze.txt
-variable (color choice) heuristic: Constrained
-value (path choice) heuristic: False
-run time: 148.149 
-time spend finding paths: 130.733 
-number of edges traversed: 4754
+***********************************
+
 
